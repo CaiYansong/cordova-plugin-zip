@@ -23,5 +23,14 @@ exports.unzip = function(fileName, outputDirectory, callback, progressCallback) 
             callback(-1);
         }
     };
-    exec(win, fail, 'Zip', 'unzip', [fileName, outputDirectory]);
+    var http2file = function (httpUrl) {
+      const httpP = "http://localhost/__cdvfile_files__/"
+      if (-1 == httpUrl.indexOf(httpP)) {
+        return httpUrl
+      }
+      return httpUrl.replace(httpP, cordova.file.dataDirectory)
+    }
+    console.log({fileName, outputDirectory, fileNameFile:http2file(fileName), outputDirectoryFile:http2file(outputDirectory), cordova})
+    exec(win, fail, 'Zip', 'unzip', [http2file(fileName), http2file(outputDirectory)]);
+    // exec(win, fail, 'Zip', 'unzip', [fileName, outputDirectory]);
 };
