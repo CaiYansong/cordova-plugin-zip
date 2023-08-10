@@ -25,10 +25,14 @@ exports.unzip = function(fileName, outputDirectory, callback, progressCallback) 
     };
     var http2file = function (httpUrl) {
       const httpP = "http://localhost/__cdvfile_files__/"
-      if (-1 == httpUrl.indexOf(httpP)) {
-        return httpUrl
+      const httpsP = "https://localhost/__cdvfile_files__/"
+      if (-1 !== httpUrl.indexOf(httpP)) {
+        return httpUrl.replace(httpP, cordova.file.dataDirectory)
       }
-      return httpUrl.replace(httpP, cordova.file.dataDirectory)
+      if (-1 !== httpUrl.indexOf(httpsP)) {
+        return httpUrl.replace(httpsP, cordova.file.dataDirectory)
+      }
+      return httpUrl
     }
     console.log({fileName, outputDirectory, fileNameFile:http2file(fileName), outputDirectoryFile:http2file(outputDirectory), cordova})
     exec(win, fail, 'Zip', 'unzip', [http2file(fileName), http2file(outputDirectory)]);
